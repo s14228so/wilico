@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "121132596539",
+    "firebase_url": "https://wilico-dev.firebaseio.com",
+    "project_id": "wilico-dev",
+    "storage_bucket": "wilico-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121132596539:android:b48b62047756e71f0ccb1e",
+        "android_client_info": {
+          "package_name": "com.example.wilico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121132596539-hk3p99jk3j3lhu7khvhoqcbqqaa5ngbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdQDiQm-JdGEHe8jS01ISeWcTdr7fwVx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121132596539-hk3p99jk3j3lhu7khvhoqcbqqaa5ngbn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "121132596539-i91jd6b1fn8bdvjljeshfpi4rbvjqoj5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wilico"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
