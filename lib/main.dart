@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './plan_detail.dart';
 import "models/plan.dart";
+import 'online.dart';
 
 void main() => runApp(App());
 
@@ -36,7 +37,30 @@ class _MyHomePageState extends State<MyHomePage> {
           centerTitle: true,
           leading: Icon(Icons.search),
         ),
-        body: createListView(),
+        body: Column(
+          children: <Widget>[
+            new Expanded(
+                flex: 1,
+                child: Container(
+                  width: 250,
+                  margin: EdgeInsets.symmetric(vertical: 20),
+                  child: RaisedButton(
+                    color: Colors.orangeAccent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(10.0)),
+                    child: Text("無料オンライン相談へ",
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Online()),
+                      );
+                    },
+                  ),
+                )),
+            new Expanded(flex: 6, child: createListView()),
+          ],
+        ),
         endDrawer: Drawer(
             child: ListView(
           padding: EdgeInsets.zero,
@@ -96,7 +120,6 @@ class _MyHomePageState extends State<MyHomePage> {
         "https://firebasestorage.googleapis.com/v0/b/coach-59f10.appspot.com/o/images%2FIMG_5557.JPG?alt=media&token=88c67509-37cb-4457-8871-55b9a91a0963";
     return Container(
       padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-      margin: EdgeInsets.only(top: 30.0),
       child: GridView.count(
         mainAxisSpacing: 20,
         childAspectRatio: 0.7,
@@ -115,62 +138,80 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: Card(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    new Container(
-                        width: 100.0,
-                        height: 100.0,
-                        margin: EdgeInsets.only(top: 20.0),
-                        decoration: new BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: new DecorationImage(
-                                fit: BoxFit.cover,
-                                image: new NetworkImage(img)))),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Text(
-                      "冨迫孔聡コーチ",
-                      style: TextStyle(
-                          fontSize: 14.0, fontWeight: FontWeight.w700),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Text(
-                      "コース ${index + 1}",
-                      style: TextStyle(
-                          fontSize: 14.0, fontWeight: FontWeight.w700),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Text("${(index + 1) * 1000}円/月"),
-                    Wrap(
-                      // alignment: WrapAlignment.start,
-                      spacing: 2.0, // gap between adjacent chips
-                      direction: Axis.horizontal, // gap between lines
-                      children: <Widget>[
-                        Container(
-                          child: Chip(
-                            label: Text(
-                              'Hamilton',
-                              style: TextStyle(fontSize: 10.0),
-                            ),
-                          ),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      new Container(
+                          width: 100.0,
+                          height: 100.0,
+                          margin: EdgeInsets.only(top: 20.0),
+                          decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 2,
+                                color: Color.fromRGBO(37, 178, 144, 1),
+                              ),
+                              image: new DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: new NetworkImage(img)))),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        "冨迫孔聡コーチ",
+                        style: TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.w700),
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "おちんちんコース ${index + 1}",
+                          style: TextStyle(
+                              fontSize: 14.0, fontWeight: FontWeight.w700),
                         ),
-                        Container(
-                          child: Chip(
-                            label: Text(
-                              'Hamilton',
-                              style: TextStyle(fontSize: 10.0),
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text("${(index + 1) * 1000}円/月")),
+                      Wrap(
+                        // alignment: WrapAlignment.start,
+                        spacing: 2.0, // gap between adjacent chips
+                        direction: Axis.horizontal, // gap between lines
+                        children: <Widget>[
+                          Container(
+                            child: Chip(
+                              label: Text(
+                                'Hamilton',
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  color: Color.fromRGBO(37, 178, 144, 1),
+                                ),
+                              ),
                             ),
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                          Container(
+                            child: Chip(
+                              label: Text(
+                                'Hamilton',
+                                style: TextStyle(
+                                  fontSize: 10.0,
+                                  color: Color.fromRGBO(37, 178, 144, 1),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
