@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wilico/pages/mypage.dart';
 import './plan_detail.dart';
-import "models/plan.dart";
-import 'online.dart';
+import "./pages/home.dart";
+import "./pages/login.dart";
 
 void main() => runApp(App());
 
@@ -26,6 +25,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var count = 1;
   var title = "";
+  int _index = 0;
+  bool isAuth = false;
+  PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,50 +55,57 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              title: Text('プランを探す'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.timeline),
-              title: Text('タイムライン'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message),
-              title: Text('トーク'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('マイページ'),
-            ),
-          ],
+          items: isAuth
+              ? const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.search),
+                    title: Text('プランを探す'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.timeline),
+                    title: Text('タイムライン'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.message),
+                    title: Text('トーク'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    title: Text('マイページ'),
+                  ),
+                ]
+              : const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    title: Text('Home'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.timeline),
+                    title: Text('タイムライン'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    title: Text('ログイン'),
+                  ),
+                ],
           currentIndex: 0,
           selectedItemColor: Colors.amber[800],
-          onTap: null,
+          onTap: (int index) {
+            _pageController.animateToPage(index,
+                duration: const Duration(milliseconds: 10), curve: Curves.ease);
+          },
         ),
-        body: Column(
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (int index) {
+            setState(() {
+              this._index = index;
+            });
+          },
           children: <Widget>[
-            new Expanded(
-                flex: 1,
-                child: Container(
-                  width: 250,
-                  margin: EdgeInsets.symmetric(vertical: 20),
-                  child: RaisedButton(
-                    color: Colors.orangeAccent,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(10.0)),
-                    child: Text("無料オンライン相談へ",
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Online()),
-                      );
-                    },
-                  ),
-                )),
-            new Expanded(flex: 6, child: createListView()),
+            new Home(),
+            new MyPage(),
+            new Login(),
           ],
         ),
         endDrawer: Drawer(
@@ -137,128 +159,5 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         )));
-  }
-
-  createListView() {
-    return StreamBuilder(
-        stream: Firestore.instance.collection('plans').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          // エラーの場合
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Text('Loading ...');
-            default:
-              return Container(
-                  padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 0),
-                  child: GridView.count(
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      children: List.generate(snapshot.data.documents.length,
-                          (index) {
-                        return Container(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PlanDetail(
-                                      plan: new Plan((index + 1).toString())),
-                                ),
-                              );
-                            },
-                            child: Card(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    new Container(
-                                        width: 100.0,
-                                        height: 100.0,
-                                        margin: EdgeInsets.only(top: 20.0),
-                                        decoration: new BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              width: 2,
-                                              color: Color.fromRGBO(
-                                                  37, 178, 144, 1),
-                                            ),
-                                            image: new DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: new NetworkImage("")))),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Text(
-                                      snapshot.data.documents[index]["title"],
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "おちんちんコース ${index + 1}",
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10.0,
-                                    ),
-                                    Align(
-                                        alignment: Alignment.centerLeft,
-                                        child:
-                                            Text("${(index + 1) * 1000}円/月")),
-                                    Wrap(
-                                      // alignment: WrapAlignment.start,
-                                      spacing:
-                                          2.0, // gap between adjacent chips
-                                      direction:
-                                          Axis.horizontal, // gap between lines
-                                      children: <Widget>[
-                                        Container(
-                                          child: Chip(
-                                            label: Text(
-                                              'Hamilton',
-                                              style: TextStyle(
-                                                fontSize: 10.0,
-                                                color: Color.fromRGBO(
-                                                    37, 178, 144, 1),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          child: Chip(
-                                            label: Text(
-                                              'Hamilton',
-                                              style: TextStyle(
-                                                fontSize: 10.0,
-                                                color: Color.fromRGBO(
-                                                    37, 178, 144, 1),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      })));
-          }
-        });
   }
 }
