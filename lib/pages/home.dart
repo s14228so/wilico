@@ -16,6 +16,7 @@ class Home extends StatelessWidget {
           final openLists = snapshot.data.documents
               .where((data) => data["open"] == true)
               .toList();
+          // if (snapshot.data == null) return Text("No data");
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           }
