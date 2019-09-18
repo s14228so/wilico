@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../online.dart';
+import '../plan_detail.dart';
+import "../models/plan.dart";
 
 class Home extends StatelessWidget {
   const Home({

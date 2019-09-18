@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wilico/pages/mypage.dart';
-import './plan_detail.dart';
 import "./pages/home.dart";
 import "./pages/login.dart";
 
