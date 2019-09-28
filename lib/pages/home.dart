@@ -99,34 +99,20 @@ class Home extends StatelessWidget {
                                           Axis.horizontal, // gap between lines
                                       children: snapshot
                                           .data.documents[index].data["tags"]
-                                          .map((tag) {
-                                        return <Widget>[
-                                          Container(
-                                            child: Chip(
-                                              label: Text(
-                                                '$tag',
-                                                style: TextStyle(
-                                                  fontSize: 10.0,
-                                                  color: Color.fromRGBO(
-                                                      37, 178, 144, 1),
-                                                ),
+                                          .map<Widget>((tag) {
+                                        return Container(
+                                          child: Chip(
+                                            label: Text(
+                                              '$tag',
+                                              style: TextStyle(
+                                                fontSize: 10.0,
+                                                color: Color.fromRGBO(
+                                                    37, 178, 144, 1),
                                               ),
                                             ),
                                           ),
-                                          Container(
-                                            child: Chip(
-                                              label: Text(
-                                                'Hamilton',
-                                                style: TextStyle(
-                                                  fontSize: 10.0,
-                                                  color: Color.fromRGBO(
-                                                      37, 178, 144, 1),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ];
-                                      }))
+                                        );
+                                      }).toList())
                                 ],
                               ),
                             ),
